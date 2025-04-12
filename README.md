@@ -1,50 +1,98 @@
-# Welcome to your Expo app 👋
+# VitaWave Health App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application to connect ASHA workers, ANMs, and care seekers for better healthcare delivery in rural areas.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **ASHA Worker Dashboard**: Manage tasks, track patients, and update records
+- **Care Seeker Dashboard**: Find healthcare workers, book appointments, and access health information
+- **Health Assistant Chatbot**: AI-powered assistant for healthcare information
 
-   ```bash
-   npm install
-   ```
+## Chatbot Implementation
 
-2. Start the app
+The app offers an AI-powered Health Assistant chatbot built with Dialogflow. There are two methods to integrate the chatbot:
 
-   ```bash
-    npx expo start
-   ```
+### Method 1: In-App WebView Integration
 
-In the output, you'll find options to open the app in a
+The chatbot is integrated directly into the app using React Native's WebView component. This method is used in:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- `DialogflowChatbot.tsx`: Modal-based chatbot accessed from the floating button
+- `chatbot.tsx`: Full-screen chatbot page accessible from the Health Services section
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+If you experience issues with the in-app WebView implementation, try the troubleshooting steps below.
 
-## Get a fresh project
+### Method 2: External Browser Integration
 
-When you're ready, run:
+As a fallback option, the chatbot can be accessed through an external browser. This method:
+
+- Requires hosting the `dialogflow-chat.html` file on a web server
+- Uses the device's browser, which often has better support for Dialogflow
+- Is accessible through the "Browser Chat" option when tapping the chat button
+
+### Hosting the Web Chatbot
+
+To set up the external browser chatbot:
+
+1. Upload the `dialogflow-chat.html` file to a web hosting service (GitHub Pages, Netlify, Vercel, Firebase Hosting, etc.)
+2. Update the `chatbotUrl` in `WebChatbot.tsx` with your hosted URL
+3. The hosted page will display the Dialogflow messenger in a mobile-friendly format
+
+### Troubleshooting the WebView Integration
+
+If the in-app chatbot is not working:
+
+1. **Verify Dialogflow Agent**: Make sure your Dialogflow agent ID is correct in the HTML templates
+2. **Network Connectivity**: The Dialogflow messenger requires internet access
+3. **WebView Debugging**: Enable WebView debugging on Android by adding `webview:setWebContentsDebuggingEnabled(true)` 
+4. **Try Different User Agents**: The current implementation uses an iOS user agent, but you may need to test with others
+5. **Use the Browser Option**: As a last resort, use the external browser option which has better compatibility
+
+## Development
+
+### Prerequisites
+
+- Node.js v14+ and npm
+- Expo CLI
+- Android Studio or Xcode for emulators
+
+### Setup
 
 ```bash
-npm run reset-project
+# Install dependencies
+npm install
+
+# Start the development server
+cd main
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Running on PowerShell
 
-## Learn more
+If using PowerShell on Windows, use separate commands instead of chaining with `&&`:
 
-To learn more about developing your project with Expo, look at the following resources:
+```powershell
+cd main
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Project Structure
 
-## Join the community
+- `app/`: Main application code
+  - `screens/`: Screen components for different user roles
+    - `asha/`: ASHA worker screens
+    - `seeker/`: Care seeker screens
+    - `anm/`: ANM screens
+  - `components/`: Reusable components
+  - `context/`: React Context providers
+  - `utils/`: Utility functions
 
-Join our community of developers creating universal apps.
+## Dialogflow Setup
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Create a Dialogflow CX agent in the Google Cloud Console
+2. Set up intents for common healthcare queries
+3. Use the agent ID in the chatbot implementation
+4. Configure the Dialogflow Messenger integration
+
+## License
+
+[Your License]
